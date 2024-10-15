@@ -75,11 +75,23 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             cnx.setNumeroCompteClient(numCompteClient);
                             cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
                             cnx.envoyer("NOUVEAU OK " + t[0] + " cree");
+                            cnx.envoyer(" : " + banque.getNumeroCompteParDefaut(numCompteClient));
+
                         }
                         else
                             cnx.envoyer("NOUVEAU NO "+t[0]+" existe");
                     }
                     break;
+
+
+                case "CONNECT":
+
+
+
+
+
+
+
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
                     msg = (evenement.getType() + " " + evenement.getArgument()).toUpperCase();

@@ -22,12 +22,12 @@ public class Banque implements Serializable {
      * @return le compte-client s'il a été trouvé. Sinon, retourne null
      */
     public CompteClient getCompteClient(String numeroCompteClient) {
-        CompteClient cpt = new CompteClient(numeroCompteClient,"");
-        int index = this.comptes.indexOf(cpt);
-        if (index != -1)
-            return this.comptes.get(index);
-        else
-            return null;
+        for (int i = 0; i < comptes.size(); i++) {
+            if (comptes.get(i).getNumero().equalsIgnoreCase(numeroCompteClient)) {
+                return comptes.get(i);
+            }
+        }
+        return null;
     }
 
     /**
@@ -94,20 +94,43 @@ public class Banque implements Serializable {
      * @return true si le compte a été créé correctement
      */
     public boolean ajouter(String numCompteClient, String nip) {
-        /*À compléter et modifier :
-            - Vérifier que le numéro a entre 6 et 8 caractères et ne contient que des lettres majuscules et des chiffres.
-              Sinon, retourner false.
-            - Vérifier que le nip a entre 4 et 5 caractères et ne contient que des chiffres. Sinon,
-              retourner false.
-            - Vérifier s'il y a déjà un compte-client avec le numéro, retourner false.
-            - Sinon :
-                . Créer un compte-client avec le numéro et le nip;
-                . Générer (avec CompteBancaire.genereNouveauNumero()) un nouveau numéro de compte bancaire qui n'est
-                  pas déjà utilisé;
-                . Créer un compte-chèque avec ce numéro et l'ajouter au compte-client;
-                . Ajouter le compte-client à la liste des comptes et retourner true.
-         */
-        return this.comptes.add(new CompteClient(numCompteClient,nip)); //À modifier
+
+        //Vérification du numéro de compte-client
+        if (numCompteClient.length() < 6 || numCompteClient.length() > 8){
+            return false;
+        }
+        for (int i = 0; i < numCompteClient.length(); i++) {
+            char caractere = numCompteClient.charAt(i);     //Vérifie que chaque caractère est un nombre ou une lettre majuscule
+            if (!(caractere >= 48 && caractere <= 57) && !(caractere >=65 && caractere<= 89  )  ) {
+                return false;
+            }
+        }
+
+        //Vérification du nip
+        if (nip.length() < 4 || nip.length() > 5) {     //Vérifie la longueur du nip
+            return false;
+        }
+        for (int i = 0; i < nip.length(); i++) {
+            char caractere = nip.charAt(i);
+            if (!(caractere >= 48 && caractere <= 57)) {    //Vérifie si chaque caractère est un nombre
+                return false;
+            }
+        }
+
+        //Vérification de l'existance du numéro du compte client
+        for (int i = 0; i < comptes.size(); i++) {
+            if (comptes.get(i).getNumero().equalsIgnoreCase(numCompteClient)) {
+                return false;
+            }
+        }
+
+        //Création du compte-client
+        CompteClient compteClient = new CompteClient(numCompteClient,nip);
+        String nouveauNumero = CompteBancaire.genereNouveauNumero();                                                    //A vérifier si il existe ou pas
+        CompteCheque compteCheque = new CompteCheque(nouveauNumero,TypeCompte.CHEQUE);
+        compteClient.ajouter(compteCheque);
+        this.comptes.add(compteClient);
+        return true;
     }
 
     /**
@@ -117,7 +140,13 @@ public class Banque implements Serializable {
      * @return numéro du compte-chèque du client ayant le numéro de compte-client
      */
     public String getNumeroCompteParDefaut(String numCompteClient) {
-        //À compléter : retourner le numéro du compte-chèque du compte-client.
-        return null; //À modifier
+        CompteClient compteClient = getCompteClient(numCompteClient);
+        List <CompteBancaire> compteBancaires = compteClient.getComptes();
+        for (int i = 0; i < compteBancaires.size(); i++) {
+            if (compteBancaires.get(i).getType().equals(TypeCompte.CHEQUE)) {
+                return compteBancaires.get(i).getNumero();
+            }
+        }
+        return "ERREUR PAS DE COMPTE ÉPARGNE";
     }
 }
