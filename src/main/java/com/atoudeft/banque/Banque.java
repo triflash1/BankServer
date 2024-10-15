@@ -15,6 +15,8 @@ public class Banque implements Serializable {
         this.comptes = new ArrayList<>();
     }
 
+
+
     /**
      * Recherche un compte-client à partir de son numéro.
      *
@@ -29,6 +31,8 @@ public class Banque implements Serializable {
         }
         return null;
     }
+
+
 
     /**
      * Vérifier qu'un compte-bancaire appartient bien au compte-client.
