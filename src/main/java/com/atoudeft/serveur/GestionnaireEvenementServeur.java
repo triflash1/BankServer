@@ -112,6 +112,13 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     }
                     break;
+
+
+
+
+
+
+
                 case "EPARGNE":
                     banque = serveurBanque.getBanque();
                     if (cnx.getNumeroCompteClient() == null) {cnx.envoyer("EPARGNE NO (pas Connecté)");}
