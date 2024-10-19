@@ -21,6 +21,21 @@ public class CompteClient implements Serializable {
         comptes = new ArrayList<>();
     }
 
+    public String getNumero() {
+        return numero;
+    }
+
+    public List<CompteBancaire> getComptes() {
+        return comptes;
+    }
+
+    public boolean verificationCompte(String numero1, String nip1) {
+        if (numero1.equalsIgnoreCase(numero) && nip1.equalsIgnoreCase(nip1)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Ajoute un compte bancaire au compte-client.
      *
