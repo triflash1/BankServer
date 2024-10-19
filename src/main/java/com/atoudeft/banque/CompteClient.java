@@ -30,7 +30,7 @@ public class CompteClient implements Serializable {
     }
 
     public boolean verificationCompte(String numero1, String nip1) {
-        if (numero1.equalsIgnoreCase(numero) && nip1.equalsIgnoreCase(nip1)) {
+        if (numero1.equalsIgnoreCase(numero) && nip1.equalsIgnoreCase(nip)) {
             return true;
         }
         return false;
