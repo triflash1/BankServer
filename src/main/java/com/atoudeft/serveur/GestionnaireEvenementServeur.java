@@ -161,7 +161,14 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
 
+                case "DEPOT":
+                    if (cnx.getNumeroCompteActuel() == null){
+                        cnx.envoyer("DEPOT NO (Pas connecté)");
+                        break;
+                    }
 
+
+                    break;
 
 
 
