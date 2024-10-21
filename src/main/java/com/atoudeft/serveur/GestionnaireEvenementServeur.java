@@ -1,12 +1,13 @@
 package com.atoudeft.serveur;
 
-import com.atoudeft.banque.Banque;
-import com.atoudeft.banque.CompteClient;
+import com.atoudeft.banque.*;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
 import com.atoudeft.commun.evenement.GestionnaireEvenement;
 import com.atoudeft.commun.net.Connexion;
+
+import java.util.List;
 
 /**
  * Cette classe représente un gestionnaire d'événement d'un serveur. Lorsqu'un serveur reçoit un texte d'un client,
@@ -113,6 +114,52 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
 
+
+                case "SELECT":
+                    banque = serveurBanque.getBanque();
+                    argument = evenement.getArgument();
+                    if (cnx.getNumeroCompteClient()==null) {
+                        cnx.envoyer("SELECT NO (pas Connecté)");
+                        break;
+                    }
+                    String numeroclient = cnx.getNumeroCompteClient();
+                    CompteClient compteClient = banque.getCompteClient(numeroclient);
+                    List<CompteBancaire> comptes = compteClient.getComptes();
+                    CompteBancaire compteBancaire = null;
+
+                    if (argument.equalsIgnoreCase("cheque")) {
+                        for (int i = 0; i < comptes.size(); i++) {
+                            if (comptes.get(i).getType() == TypeCompte.CHEQUE) {
+                                compteBancaire = comptes.get(i);
+                                break;
+                            }
+                        }
+                        if (compteBancaire == null) {
+                            cnx.envoyer("SELECT NO (Compte inexistant)");
+                        } else {
+                            cnx.setNumeroCompteActuel(compteBancaire.getNumero());
+                            cnx.envoyer("SELECT OK");
+                        }
+
+                    }else if (argument.equalsIgnoreCase("epargne")) {
+                        for (int i = 0; i < comptes.size(); i++) {
+                            if (comptes.get(i).getType() == TypeCompte.EPARGNE) {
+                                compteBancaire = comptes.get(i);
+                                break;
+                            }
+                        }
+                        if (compteBancaire == null) {
+                            cnx.envoyer("SELECT NO (Compte inexistant)");
+                        } else {
+                            cnx.setNumeroCompteActuel(compteBancaire.getNumero());
+                            cnx.envoyer("SELECT OK");
+                        }
+
+                    }else {
+                        cnx.envoyer("SELECT NO (cheque ou epargne)");
+                        break;
+                    }
+                    break;
 
 
 
