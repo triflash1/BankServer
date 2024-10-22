@@ -7,22 +7,7 @@ public abstract class CompteBancaire implements Serializable {
     private TypeCompte type;
     private double solde;
 
-    /**
-     * Génère un numéro de compte bancaire aléatoirement avec le format CCC00C, où C est un caractère alphabétique
-     * majuscule et 0 est un chiffre entre 0 et 9.
-     * @return
-     */
-    public static String genereNouveauNumero() {
-        char[] t = new char[6];
-        for (int i=0;i<3;i++) {
-            t[i] = (char)((int)(Math.random()*26)+'A');
-        }
-        for (int i=3;i<5;i++) {
-            t[i] = (char)((int)(Math.random()*10)+'0');
-        }
-        t[5] = (char)((int)(Math.random()*26)+'A');
-        return new String(t);
-    }
+
 
     /**
      * Crée un compte bancaire.

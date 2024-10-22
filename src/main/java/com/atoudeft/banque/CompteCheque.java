@@ -36,12 +36,16 @@ public class CompteCheque extends CompteBancaire {
     }
 
     @Override
-    public boolean payerFacture(String numeroFacture, double montant, String description) {
+    public boolean payerFacture(String numeroFacture, double montant, String description)
+    {
         return false;
     }
 
     @Override
-    public boolean transferer(double montant, String numeroCompteDestinataire) {
+    public boolean transferer(double montant, String numeroCompteDestinataire)
+    {
         return false;
     }
+
+
 }

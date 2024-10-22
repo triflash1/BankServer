@@ -19,6 +19,9 @@ public class Banque implements Serializable
 
 
 
+
+
+
     /**
      * Recherche un compte-client à partir de son numéro.
      *
@@ -32,6 +35,37 @@ public class Banque implements Serializable
             }
         }
         return null;
+    }
+
+    /**
+     * Génère un numéro de compte bancaire aléatoirement avec le format CCC00C, où C est un caractère alphabétique
+     * majuscule et 0 est un chiffre entre 0 et 9.
+     * @return
+     */
+    public String genereNouveauNumero() {
+        boolean alreadyExists = false;
+        char[] t = new char[6];
+        do
+        {
+
+        for (int i=0;i<3;i++) {
+            t[i] = (char)((int)(Math.random()*26)+'A');
+        }
+        for (int i=3;i<5;i++) {
+            t[i] = (char)((int)(Math.random()*10)+'0');
+        }
+        t[5] = (char)((int)(Math.random()*26)+'A');
+
+            for (CompteClient compte : comptes)
+            {
+                for (int j = 0; j < compte.getComptes().size(); j++)
+                {
+                    alreadyExists = !compte.getComptes().get(j).getNumero().equals(new String(t));
+                }
+            }
+
+        }while (alreadyExists);
+        return new String(t);
     }
 
 
@@ -132,7 +166,7 @@ public class Banque implements Serializable
 
         //Création du compte-client
         CompteClient compteClient = new CompteClient(numCompteClient,nip);
-        String nouveauNumero = CompteBancaire.genereNouveauNumero();                                                    //A vérifier si il existe ou pas
+        String nouveauNumero = genereNouveauNumero();
         CompteCheque compteCheque = new CompteCheque(nouveauNumero,TypeCompte.CHEQUE);
         compteClient.ajouter(compteCheque);
         this.comptes.add(compteClient);
@@ -154,5 +188,28 @@ public class Banque implements Serializable
             }
         }
         return "ERREUR PAS DE COMPTE ÉPARGNE";
+    }
+
+    /**
+     * Ajoute un compte Épargne si un n'existes pas déjà dans le compte client actuel.
+     *
+     * @param numCompteClient de compte-client
+     * @return true si le compteClient n'a pas de compte Épargne.
+     * Sinon false
+     */
+    public String ajouterEpargne(String numCompteClient)
+    {
+        CompteClient compteClient = getCompteClient(numCompteClient);
+        List <CompteBancaire> compteBancaires = compteClient.getComptes();
+        for (int i = 0; i < compteBancaires.size(); i++) {
+            if (compteBancaires.get(i).getType().equals(TypeCompte.EPARGNE))
+            {
+                return "EPARGNE NO";
+            }
+        }
+        String nouveauNumero = genereNouveauNumero();
+        CompteEpargne compteEpargne = new CompteEpargne(5, nouveauNumero, TypeCompte.EPARGNE);
+        compteClient.ajouter(compteEpargne);
+        return nouveauNumero;
     }
 }

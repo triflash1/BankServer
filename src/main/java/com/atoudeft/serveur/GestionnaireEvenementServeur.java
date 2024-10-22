@@ -1,6 +1,14 @@
 package com.atoudeft.serveur;
 
+import com.atoudeft.banque.Banque;
+import com.atoudeft.banque.CompteBancaire;
+import com.atoudeft.banque.CompteClient;
+import com.atoudeft.banque.TypeCompte;
 import com.atoudeft.banque.*;
+import com.atoudeft.banque.Banque;
+import com.atoudeft.banque.CompteBancaire;
+import com.atoudeft.banque.CompteClient;
+import com.atoudeft.banque.TypeCompte;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
@@ -85,7 +93,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
 
-
                 case "CONNECT":
                     argument = evenement.getArgument();
                     t = argument.split(":");
@@ -113,12 +120,18 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     }
                     break;
+                case "EPARGNE":
+                    banque = serveurBanque.getBanque();
+                    if (cnx.getNumeroCompteClient() == null) {cnx.envoyer("EPARGNE NO (pas Connecté)");}
+                    else {banque.ajouterEpargne(cnx.getNumeroCompteClient());}
+                    break;
+
 
 
                 case "SELECT":
                     banque = serveurBanque.getBanque();
                     argument = evenement.getArgument();
-                    if (cnx.getNumeroCompteClient()==null) {
+                    if (cnx.getNumeroCompteClient() == null) {
                         cnx.envoyer("SELECT NO (pas Connecté)");
                         break;
                     }
@@ -203,6 +216,4 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
             }
         }
     }
-
-
 }
