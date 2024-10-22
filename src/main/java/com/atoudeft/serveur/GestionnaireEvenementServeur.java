@@ -59,6 +59,9 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     cnx.envoyer("LIST " + serveurBanque.list());
                     break;
                 /******************* COMMANDES DE GESTION DE COMPTES *******************/
+
+
+
                 case "NOUVEAU": //Crée un nouveau compte-client :
                     if (cnx.getNumeroCompteClient()!=null) {
                         cnx.envoyer("NOUVEAU NO deja connecte");

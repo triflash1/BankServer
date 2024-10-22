@@ -21,6 +21,7 @@ public class CompteClient implements Serializable {
         comptes = new ArrayList<>();
     }
 
+
     public String getNumero() {
         return numero;
     }
@@ -29,6 +30,13 @@ public class CompteClient implements Serializable {
         return comptes;
     }
 
+    /**
+     * Vérifie si le numéro et le nip du compte client fonctionne
+     *
+     * @param numero1 le numéro du compte-client
+     * @param nip1 le nip du compte-client
+     * @return true si le compte-client est valide, false si il est invalide
+     */
     public boolean verificationCompte(String numero1, String nip1) {
         if (numero1.equalsIgnoreCase(numero) && nip1.equalsIgnoreCase(nip)) {
             return true;
