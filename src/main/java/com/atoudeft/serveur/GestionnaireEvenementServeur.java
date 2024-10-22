@@ -124,7 +124,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                 case "EPARGNE":
                     banque = serveurBanque.getBanque();
                     if (cnx.getNumeroCompteClient() == null) {cnx.envoyer("EPARGNE NO (pas Connecté)");}
-                    else {banque.ajouterEpargne(cnx.getNumeroCompteClient());}
+                    else {cnx.envoyer(banque.ajouterEpargne(cnx.getNumeroCompteClient()));}
                     break;
 
 

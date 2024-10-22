@@ -58,7 +58,7 @@ public class Banque implements Serializable
             {
                 for (int j = 0; j < compte.getComptes().size(); j++)
                 {
-                    alreadyExists = !compte.getComptes().get(j).getNumero().equals(new String(t));
+                    alreadyExists = compte.getComptes().get(j).getNumero().equals(new String(t));
                 }
             }
 
@@ -208,6 +208,6 @@ public class Banque implements Serializable
         String nouveauNumero = genereNouveauNumero();
         CompteEpargne compteEpargne = new CompteEpargne(5, nouveauNumero, TypeCompte.EPARGNE);
         compteClient.ajouter(compteEpargne);
-        return nouveauNumero;
+        return "EPARGNE OK " + nouveauNumero;
     }
 }
