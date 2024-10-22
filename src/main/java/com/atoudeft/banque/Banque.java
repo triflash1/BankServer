@@ -6,7 +6,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Banque implements Serializable {
+
+public class Banque implements Serializable
+{
     private String nom;
     private List<CompteClient> comptes;
 
