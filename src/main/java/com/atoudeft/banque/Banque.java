@@ -20,8 +20,6 @@ public class Banque implements Serializable
 
 
 
-
-
     /**
      * Recherche un compte-client à partir de son numéro.
      *
