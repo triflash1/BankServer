@@ -113,31 +113,9 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
                 case "EPARGNE":
-                    argument = evenement.getArgument();
-                    t = argument.split(":");
-                    if (t.length<2) {
-                        cnx.envoyer("EPARGNE NO");
-                    }
-                    else {                                                                                              //TODO Manque la vérification si il est déja connecté
-                        numCompteClient = t[0];
-                        nip = t[1];
-                        banque = serveurBanque.getBanque();
-                        if (banque.getCompteClient(numCompteClient) == null) { //Refuse si le client n'est pas connecté
-                            cnx.envoyer("EPARGNE NO");
-                        }
-                        else {
-                            CompteClient compteClient = banque.getCompteClient(numCompteClient);
-
-                            if (compteClient.verificationCompte(numCompteClient, nip)) {
-                                cnx.setNumeroCompteClient(numCompteClient);
-                                cnx.setNumeroCompteActuel(banque.getNumeroCompteParDefaut(numCompteClient));
-                                cnx.envoyer("EPARGNE OK");
-                            }
-                            else {
-                                cnx.envoyer("EPARGNE NO");
-                            }
-                        }
-                    }
+                    banque = serveurBanque.getBanque();
+                    if (cnx.getNumeroCompteClient() == null) {cnx.envoyer("EPARGNE NO (pas Connecté)");}
+                    else {banque.ajouterEpargne(cnx.getNumeroCompteClient());}
                     break;
 
 
@@ -145,7 +123,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                 case "SELECT":
                     banque = serveurBanque.getBanque();
                     argument = evenement.getArgument();
-                    if (cnx.getNumeroCompteClient()==null) {
+                    if (cnx.getNumeroCompteClient() == null) {
                         cnx.envoyer("SELECT NO (pas Connecté)");
                         break;
                     }
