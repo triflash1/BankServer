@@ -162,19 +162,30 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     break;
 
                 case "DEPOT":
+                    try{
+                        double montantDepot = Double.parseDouble(evenement.getArgument());
 
-                    double montant = 100;
-                    banque = serveurBanque.getBanque();
-                    compteClient = banque.getCompteClient(cnx.getNumeroCompteClient());
-                    //TODO verifier pas egal a null
-                    obtenirCompte(cnx.getNumeroCompteActuel(),compteClient).crediter(montant);
-                    System.out.println(obtenirCompte(cnx.getNumeroCompteActuel(),compteClient).getSolde());
+                        banque = serveurBanque.getBanque();
+                        compteClient = banque.getCompteClient(cnx.getNumeroCompteClient());
+                        if (compteClient == null){
+                            cnx.envoyer("DEPOT " + evenement.getArgument() + " NO (Pas connecté a un compte client)");
+                            break;
+                        }
+                        compteBancaire = compteClient.obtenirCompteBancaire(cnx.getNumeroCompteActuel());
+                        if (compteBancaire == null){
+                            cnx.envoyer("DEPOT " + evenement.getArgument() + " NO (Compte Bancaire Inexistant)");
+                            break;
+                        }
+                        if(compteBancaire.crediter(montantDepot)){
+                            cnx.envoyer("DEPOT " + evenement.getArgument() + " OK");
+                            break;
+                        }
+                        cnx.envoyer("DEPOT " + evenement.getArgument() + "NO (Montant invalide)");
 
-
-
+                    }catch (NumberFormatException numberFormatException){
+                        cnx.envoyer("DEPOT "+ evenement.getArgument()+ " NO (Formmat de montant invalide)");
+                    }
                     break;
-
-
 
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
@@ -183,16 +194,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
             }
         }
     }
-    private CompteBancaire obtenirCompte(String numeroCompteBancaire,CompteClient compteClient){
-       List<CompteBancaire> comptes = compteClient.getComptes();
-       if (comptes == null || comptes.isEmpty()){
-           return null;
-       }
-       for(CompteBancaire compteBancaire:comptes){
-           if (compteBancaire.getNumero().equals(numeroCompteBancaire)){
-               return compteBancaire;
-           }
-       }
-        return null;
-    }
+
+
 }

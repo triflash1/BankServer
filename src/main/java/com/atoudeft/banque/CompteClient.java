@@ -45,4 +45,19 @@ public class CompteClient implements Serializable {
     public boolean ajouter(CompteBancaire compte) {
         return this.comptes.add(compte);
     }
+
+    /***
+     * Cherche un compte bancaire
+     *
+     * @param numeroCompteBancaire numéro du compte que l'on désire trouver
+     * @return le premier compte bancaire trouvé
+     */
+    public CompteBancaire obtenirCompteBancaire(String numeroCompteBancaire){
+        for(CompteBancaire compteBancaire:comptes){
+            if (compteBancaire.getNumero().equals(numeroCompteBancaire)){
+                return compteBancaire;
+            }
+        }
+        return null;
+    }
 }
