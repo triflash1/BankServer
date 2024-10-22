@@ -1,6 +1,7 @@
 package com.atoudeft.serveur;
 
-import com.atoudeft.banque.*;
+import com.atoudeft.banque.Banque;
+import com.atoudeft.banque.CompteClient;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
@@ -84,6 +85,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             cnx.envoyer("NOUVEAU NO "+t[0]+" existe");
                     }
                     break;
+
 
                 case "CONNECT":
                     argument = evenement.getArgument();
