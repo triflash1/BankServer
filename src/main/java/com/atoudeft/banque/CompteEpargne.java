@@ -46,8 +46,6 @@ public class CompteEpargne extends CompteBancaire
             }
             else if(taxeApplicable)
             {
-                //TODO Demander au prof ce qui arrive quand la taxe s'applique mais que
-                //TODO ton débit est plus grand que SOLDE - 2 (It would output a negative SOLDE)
                 return false;
             } else //Ici le Solde est plus de LIMITE_COMPTE_AVANT_FRAIS
             {
