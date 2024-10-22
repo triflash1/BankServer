@@ -1,5 +1,9 @@
 package com.atoudeft.serveur;
 
+import com.atoudeft.banque.Banque;
+import com.atoudeft.banque.CompteBancaire;
+import com.atoudeft.banque.CompteClient;
+import com.atoudeft.banque.TypeCompte;
 import com.atoudeft.banque.*;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
@@ -112,13 +116,6 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
 
                     }
                     break;
-
-
-
-
-
-
-
                 case "EPARGNE":
                     banque = serveurBanque.getBanque();
                     if (cnx.getNumeroCompteClient() == null) {cnx.envoyer("EPARGNE NO (pas Connecté)");}
@@ -215,6 +212,16 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
             }
         }
     }
-
-
+    private CompteBancaire obtenirCompte(String numeroCompteBancaire,CompteClient compteClient){
+       List<CompteBancaire> comptes = compteClient.getComptes();
+       if (comptes == null || comptes.isEmpty()){
+           return null;
+       }
+       for(CompteBancaire compteBancaire:comptes){
+           if (compteBancaire.getNumero().equals(numeroCompteBancaire)){
+               return compteBancaire;
+           }
+       }
+        return null;
+    }
 }
