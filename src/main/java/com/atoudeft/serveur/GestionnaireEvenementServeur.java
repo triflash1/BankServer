@@ -17,6 +17,7 @@ import com.atoudeft.commun.net.Connexion;
 
 import java.util.List;
 
+
 /**
  * Cette classe représente un gestionnaire d'événement d'un serveur. Lorsqu'un serveur reçoit un texte d'un client,
  * il crée un événement à partir du texte reçu et alerte ce gestionnaire qui réagit en gérant l'événement.
