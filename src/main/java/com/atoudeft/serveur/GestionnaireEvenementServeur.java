@@ -5,6 +5,10 @@ import com.atoudeft.banque.CompteBancaire;
 import com.atoudeft.banque.CompteClient;
 import com.atoudeft.banque.TypeCompte;
 import com.atoudeft.banque.*;
+import com.atoudeft.banque.Banque;
+import com.atoudeft.banque.CompteBancaire;
+import com.atoudeft.banque.CompteClient;
+import com.atoudeft.banque.TypeCompte;
 import com.atoudeft.banque.serveur.ConnexionBanque;
 import com.atoudeft.banque.serveur.ServeurBanque;
 import com.atoudeft.commun.evenement.Evenement;
@@ -211,17 +215,5 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     cnx.envoyer(msg);
             }
         }
-    }
-    private CompteBancaire obtenirCompte(String numeroCompteBancaire,CompteClient compteClient){
-       List<CompteBancaire> comptes = compteClient.getComptes();
-       if (comptes == null || comptes.isEmpty()){
-           return null;
-       }
-       for(CompteBancaire compteBancaire:comptes){
-           if (compteBancaire.getNumero().equals(numeroCompteBancaire)){
-               return compteBancaire;
-           }
-       }
-        return null;
     }
 }
