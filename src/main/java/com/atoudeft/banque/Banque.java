@@ -5,6 +5,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Banque implements Serializable {
     private String nom;
@@ -14,6 +15,7 @@ public class Banque implements Serializable {
         this.nom = nom;
         this.comptes = new ArrayList<>();
     }
+
 
 
 
@@ -27,6 +29,24 @@ public class Banque implements Serializable {
         for (int i = 0; i < comptes.size(); i++) {
             if (comptes.get(i).getNumero().equalsIgnoreCase(numeroCompteClient)) {
                 return comptes.get(i);
+            }
+        }
+        return null;
+    }
+
+    /**
+     *Trouve un compte avec un numero de compte bancaire correspondant
+     *
+     * @param numeroCompteBancaire numero du compte désiré
+     * @return le premier compte avec un numero qui correspond
+     */
+    public CompteBancaire getCompteBancaire(String numeroCompteBancaire){
+        for (CompteClient compteClient:comptes){
+            List<CompteBancaire> comptesBancaires = compteClient.getComptes();
+            for (CompteBancaire compteBancaire:comptesBancaires){
+                if (compteBancaire.getNumero().equals(numeroCompteBancaire)){
+                    return compteBancaire;
+                }
             }
         }
         return null;
