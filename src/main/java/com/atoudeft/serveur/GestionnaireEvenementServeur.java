@@ -195,6 +195,44 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer(typeEvenement + " "+ evenement.getArgument()+ " NO (Formmat de montant invalide)");
                     }
                     break;
+                case "FACTURE":
+                    try {
+                        String[] factureSepare = evenement.getArgument().split(" ");
+                        if (factureSepare.length < 2){
+                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (arguments invalides)");
+                            break;
+                        }
+                        double montant = Double.parseDouble(factureSepare[0]);
+                        String numFacture = factureSepare[1];
+
+                        String description = "";
+                        for (int i = 2; i < factureSepare.length; i++) {
+                            description += " " + factureSepare[i];
+                        }
+
+                        banque = serveurBanque.getBanque();
+                        compteClient = banque.getCompteClient(cnx.getNumeroCompteClient());
+                        if (compteClient == null){
+                            cnx.envoyer( typeEvenement + " " + evenement.getArgument() + " NO (Pas connecté a un compte client)");
+                            break;
+                        }
+                        compteBancaire = compteClient.obtenirCompteBancaire(cnx.getNumeroCompteActuel());
+                        if (compteBancaire == null){
+                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Compte bancaire inexistant)");
+                            break;
+                        }
+                        if (compteBancaire.debiter(montant)){
+                            cnx.envoyer(typeEvenement + " " + montant + " " + numFacture + " OK");
+                            break;
+                        }
+                        cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Montant invalide)");
+
+                        //TODO Enregistrer la facture
+
+                    }catch (NumberFormatException numberFormatException){
+                        cnx.envoyer(typeEvenement + " "+ evenement.getArgument()+ " NO (Formmat de montant invalide)");
+                    }
+                    break;
 
                 /******************* TRAITEMENT PAR DÉFAUT *******************/
                 default: //Renvoyer le texte recu convertit en majuscules :
