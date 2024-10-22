@@ -161,29 +161,38 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     }
                     break;
 
-                case "DEPOT":
+                case "DEPOT", "RETRAIT":
                     try{
                         double montantDepot = Double.parseDouble(evenement.getArgument());
 
                         banque = serveurBanque.getBanque();
                         compteClient = banque.getCompteClient(cnx.getNumeroCompteClient());
                         if (compteClient == null){
-                            cnx.envoyer("DEPOT " + evenement.getArgument() + " NO (Pas connecté a un compte client)");
+                            cnx.envoyer( typeEvenement + " " + evenement.getArgument() + " NO (Pas connecté a un compte client)");
                             break;
                         }
                         compteBancaire = compteClient.obtenirCompteBancaire(cnx.getNumeroCompteActuel());
                         if (compteBancaire == null){
-                            cnx.envoyer("DEPOT " + evenement.getArgument() + " NO (Compte Bancaire Inexistant)");
+                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Compte Bancaire Inexistant)");
                             break;
                         }
-                        if(compteBancaire.crediter(montantDepot)){
-                            cnx.envoyer("DEPOT " + evenement.getArgument() + " OK");
+
+                        //Détermine si c'est un dépot ou un retrait avant de faire l'action approprié
+                        boolean resultat = false;
+                        if (typeEvenement.equals("DEPOT")){
+                           resultat = compteBancaire.crediter(montantDepot);
+                        }else {
+                            resultat = compteBancaire.debiter(montantDepot);
+                        }
+
+                        if(resultat){
+                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " OK");
                             break;
                         }
-                        cnx.envoyer("DEPOT " + evenement.getArgument() + "NO (Montant invalide)");
+                        cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Montant invalide)");
 
                     }catch (NumberFormatException numberFormatException){
-                        cnx.envoyer("DEPOT "+ evenement.getArgument()+ " NO (Formmat de montant invalide)");
+                        cnx.envoyer(typeEvenement + " "+ evenement.getArgument()+ " NO (Formmat de montant invalide)");
                     }
                     break;
 
