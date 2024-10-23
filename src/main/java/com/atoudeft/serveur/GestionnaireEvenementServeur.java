@@ -209,39 +209,66 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer(typeEvenement + " "+ evenement.getArgument()+ " NO (Formmat de montant invalide)");
                     }
                     break;
-                case "FACTURE":
+                case "FACTURE","TRANSFER":
+
+                    banque = serveurBanque.getBanque();
+                    compteClient = banque.getCompteClient(cnx.getNumeroCompteClient());
+                    if (compteClient == null){
+                        cnx.envoyer( typeEvenement + " " + evenement.getArgument() + " NO (Pas connecté a un compte client)");
+                        break;
+                    }
+                    compteBancaire = compteClient.obtenirCompteBancaire(cnx.getNumeroCompteActuel());
+                    if (compteBancaire == null){
+                        cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Compte bancaire inexistant)");
+                        break;
+                    }
+
                     try {
-                        String[] factureSepare = evenement.getArgument().split(" ");
-                        if (factureSepare.length < 2){
+                        String[] evenementSepare = evenement.getArgument().split(" ");
+
+                        if (typeEvenement.equals("TRANSFER") && evenementSepare.length != 2){
+                            System.out.println(evenementSepare.length);
                             cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (arguments invalides)");
                             break;
                         }
-                        double montant = Double.parseDouble(factureSepare[0]);
-                        String numFacture = factureSepare[1];
-
-                        String description = "";
-                        for (int i = 2; i < factureSepare.length; i++) {
-                            description += " " + factureSepare[i];
-                        }
-
-                        banque = serveurBanque.getBanque();
-                        compteClient = banque.getCompteClient(cnx.getNumeroCompteClient());
-                        if (compteClient == null){
-                            cnx.envoyer( typeEvenement + " " + evenement.getArgument() + " NO (Pas connecté a un compte client)");
+                        if (typeEvenement.equals("FACTURE") && evenementSepare.length <= 2){
+                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (arguments invalides)");
                             break;
                         }
-                        compteBancaire = compteClient.obtenirCompteBancaire(cnx.getNumeroCompteActuel());
-                        if (compteBancaire == null){
-                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Compte bancaire inexistant)");
-                            break;
-                        }
-                        if (compteBancaire.debiter(montant)){
-                            cnx.envoyer(typeEvenement + " " + montant + " " + numFacture + " OK");
-                            break;
-                        }
-                        cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Montant invalide)");
 
-                        //TODO Enregistrer la facture
+                        double montant = Double.parseDouble(evenementSepare[0]);
+
+                        String numEvenement = evenementSepare[1];
+
+                        if (typeEvenement.equals("FACTURE")){
+
+                            String description = "";
+                            for (int i = 2; i < evenementSepare.length; i++) {
+                                description += " " + evenementSepare[i];
+                            }
+                            if (compteBancaire.debiter(montant)){
+                                cnx.envoyer(typeEvenement + " " + montant + " " + numEvenement + " OK");
+                                break;
+                            }
+                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Montant invalide)");
+
+                            //TODO Enregistrer la facture
+                        }else {
+
+                            CompteBancaire compteACrediter = banque.obtenirCompteBancaire(numEvenement);
+                            if (compteACrediter == null){
+                                cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Compte bancaire invalide)");
+                                break;
+                            }
+                            if (compteBancaire.debiter(montant) && compteACrediter.crediter(montant)){
+                                cnx.envoyer(typeEvenement + " " + montant + " " + numEvenement + " OK");
+                                break;
+                            }
+                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Solde invalide)");
+                            break;
+                        }
+
+
 
                     }catch (NumberFormatException numberFormatException){
                         cnx.envoyer(typeEvenement + " "+ evenement.getArgument()+ " NO (Formmat de montant invalide)");

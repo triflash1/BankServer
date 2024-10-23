@@ -210,4 +210,22 @@ public class Banque implements Serializable
         compteClient.ajouter(compteEpargne);
         return "EPARGNE OK " + nouveauNumero;
     }
+
+    /**
+     * Cherche un compte bancaire avec le numero desire
+     *
+     * @param numCompte numero du compte qui est recherche
+     * @return le premier compte trouve qui a le numero
+     */
+    public CompteBancaire obtenirCompteBancaire(String numCompte){
+        for(CompteClient compteClient:comptes){
+            for (CompteBancaire compteBancaire:compteClient.getComptes()){
+                if (compteBancaire.getNumero().equals(numCompte)){
+                    return compteBancaire;
+                }
+            }
+        }
+        return null;
+    }
+
 }
