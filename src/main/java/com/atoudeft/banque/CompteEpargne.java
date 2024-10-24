@@ -30,10 +30,10 @@ public class CompteEpargne extends CompteBancaire
     @Override
     public boolean crediter(double montant)
     {
-        if(this.getSolde() > 0)
+        if(this.getSolde() >= 0)
         {
             this.setSolde(this.getSolde() + montant);
-            this.historique.ajouter(new OperationRetrait(montant).toString());
+            this.historique.ajouter(new OperationDepot(montant).toString());
             return true;
         }
         return false;
@@ -42,26 +42,31 @@ public class CompteEpargne extends CompteBancaire
     @Override
     public boolean debiter(double montant)
     {
-        boolean taxeApplicable = this.getSolde() < LIMITE_COMPTE_AVANT_FRAIS;
+        this.taxeApplicable = this.getSolde() <= LIMITE_COMPTE_AVANT_FRAIS;
         if(this.getSolde() > 0 && this.getSolde() >= montant)
         {
             if (taxeApplicable && montant + FRAIS <= this.getSolde())
             {
                 this.setSolde(this.getSolde() - (FRAIS + montant));
-                this.historique.ajouter(new OperationDepot(montant + FRAIS).toString());
+                this.historique.ajouter(new OperationRetrait(montant + FRAIS).toString());
                 return true;
             }
             else if(taxeApplicable)
             {
                 return false;
+
             } else //Ici le Solde est plus de LIMITE_COMPTE_AVANT_FRAIS
             {
                 this.setSolde(this.getSolde() - montant);
-                this.historique.ajouter(new OperationDepot(montant).toString());
+                this.historique.ajouter(new OperationRetrait(montant).toString());
                 return true;
             }
         }
         return false;
+    }
+    public boolean getTaxeApplicable()
+    {
+        return this.taxeApplicable;
     }
 
     @Override

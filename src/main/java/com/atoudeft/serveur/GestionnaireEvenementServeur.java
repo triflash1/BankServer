@@ -127,19 +127,26 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     else {cnx.envoyer(banque.ajouterEpargne(cnx.getNumeroCompteClient()));}
                     break;
                 case "HIST":
-                    banque = serveurBanque.getBanque();
 
                     if (cnx.getNumeroCompteClient() == null) {cnx.envoyer("HIST NO (pas Connecté)");}
                     else {
+                        boolean activeCompte = false;
+                        banque = serveurBanque.getBanque();
                         CompteClient compteClient = banque.getCompteClient(cnx.getNumeroCompteClient());
                         List<CompteBancaire> comptes = compteClient.getComptes();
-                        for (int i = 0; i < comptes.size(); i++) {
-                            if (comptes.get(i).getType() == TypeCompte.EPARGNE) {
-                                for(int j = 0; j < comptes.get(i).getHistorique().; j++) {}
-                                comptes.get(i).getHistorique().get(i)
-                                break;
+                        for (CompteBancaire compte : comptes)
+                        {
+                            if (cnx.getNumeroCompteActuel().equals(compte.getNumero()))
+                            {
+                                cnx.envoyer(compte.getHistorique().get(0).toString());
+                                for (int j = 1; j < compte.getHistorique().getTaille(); j++)
+                                {
+                                    cnx.envoyer( "\n\t\t\t." +compte.getHistorique().get(j).toString());
+                                }
+                                activeCompte = true;
                             }
                         }
+                        if(!activeCompte) {cnx.envoyer("HIST NO (Pas dans un compteBanque)");}
                     }
                     break;
 
@@ -218,7 +225,8 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " OK");
                             break;
                         }
-                        cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Montant invalide)");
+                        if(!compteBancaire.isTaxeApplicable()){cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Montant invalide)");}
+                        else{cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (taxe de 2 $ n'est pas enlevable)");}
 
                     }catch (NumberFormatException numberFormatException){
                         cnx.envoyer(typeEvenement + " "+ evenement.getArgument()+ " NO (Formmat de montant invalide)");
