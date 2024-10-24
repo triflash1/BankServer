@@ -47,6 +47,7 @@ public class CompteClient implements Serializable {
      *
      * @param numeroCompteBancaire numéro du compte que l'on désire trouver
      * @return le premier compte bancaire trouvé
+     * @Auteur Alexandre Gamache
      */
     public CompteBancaire obtenirCompteBancaire(String numeroCompteBancaire){
         for(CompteBancaire compteBancaire:comptes){
