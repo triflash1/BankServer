@@ -1,5 +1,7 @@
 package com.atoudeft.banque.operations;
-
+/**
+ * Auteur : Alexandre Gamache
+ */
 public class OperationTransfer extends Operation{
     double montant;
     String numDest;

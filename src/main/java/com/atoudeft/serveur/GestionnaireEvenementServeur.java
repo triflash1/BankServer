@@ -174,7 +174,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         break;
                     }
                     break;
-
+                    //Auteur Alexandre Gamache
                 case "DEPOT", "RETRAIT":
                     try{
                         double montantDepot = Double.parseDouble(evenement.getArgument());
@@ -209,6 +209,7 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                         cnx.envoyer(typeEvenement + " "+ evenement.getArgument()+ " NO (Formmat de montant invalide)");
                     }
                     break;
+                    //Auteur Alexandre Gamache
                 case "FACTURE","TRANSFER":
 
                     banque = serveurBanque.getBanque();

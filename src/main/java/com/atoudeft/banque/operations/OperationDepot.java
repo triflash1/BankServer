@@ -1,5 +1,8 @@
 package com.atoudeft.banque.operations;
 
+/**
+ * Auteur : Alexandre Gamache
+ */
 public class OperationDepot extends Operation{
     double montant;
     /**

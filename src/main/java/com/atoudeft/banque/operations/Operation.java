@@ -2,7 +2,9 @@ package com.atoudeft.banque.operations;
 
 import java.io.Serializable;
 import java.util.Date;
-
+/**
+ * Auteur : Alexandre Gamache
+ */
 public abstract class Operation implements Serializable {
 
     private final TypeOperation typeOperation;
