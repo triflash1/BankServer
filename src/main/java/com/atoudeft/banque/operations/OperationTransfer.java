@@ -14,4 +14,12 @@ public class OperationTransfer extends Operation{
         this.montant =montant;
         this.numDest = numDest;
     }
+    /**
+     * Genere la description complete d'une operation de type Transfer
+     * @return la string en format "Date TYPE montant numeroDestinataire"
+     */
+    @Override
+    public String toString() {
+        return super.toString() + " " + montant + " " + numDest;
+    }
 }
