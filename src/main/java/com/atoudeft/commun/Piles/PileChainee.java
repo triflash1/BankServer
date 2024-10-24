@@ -9,14 +9,18 @@ import java.io.Serializable;
  */
 public class PileChainee<T> implements Serializable {
     Noeud<T> premierNoeud;
+    int taille;
 
-    public PileChainee(){}
+    public PileChainee(){
+        taille = 0;
+    }
     public void ajouter(T contenu){
         if (premierNoeud != null){
             premierNoeud.ajouterElement(contenu);
         }else {
             premierNoeud = new Noeud<T>(contenu);
         }
+        taille++;
     }
 
     /**
@@ -24,6 +28,7 @@ public class PileChainee<T> implements Serializable {
      * @param pos
      */
     public void enlever(int pos){
+        taille--;
         if (pos !=0){
             getNoeud(pos-1).setSuivant(getNoeud(pos+1));
             return;
@@ -49,6 +54,15 @@ public class PileChainee<T> implements Serializable {
         }
         return noeud.getContenu();
     }
+
+    /**
+     * Donne la longueur de la chaine
+     * @return nombres delements dans la chaine
+     */
+    public int getTaille(){
+        return taille;
+    }
+
 
 }
 
