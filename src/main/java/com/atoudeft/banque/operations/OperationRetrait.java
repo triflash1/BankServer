@@ -11,4 +11,13 @@ public class OperationRetrait extends Operation{
         super(TypeOperation.RETRAIT);
         this.montant = montant;
     }
+
+    /**
+     * Génere la description complete d'une operation de retrait
+     * @return la string en format "Date TYPE montant"
+     */
+    @Override
+    public String toString() {
+        return super.toString() + " " + montant;
+    }
 }

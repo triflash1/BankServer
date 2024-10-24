@@ -11,4 +11,13 @@ public class OperationDepot extends Operation{
         super(TypeOperation.DEPOT);
         this.montant = montant;
     }
+
+    /**
+     * Genere la description complete d'une operation de type Depot
+     * @return la string en format "Date TYPE montant"
+     */
+    @Override
+    public String toString() {
+        return super.toString() + " " + montant;
+    }
 }
