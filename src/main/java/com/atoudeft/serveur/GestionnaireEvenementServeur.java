@@ -269,26 +269,27 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                             for (int i = 2; i < evenementSepare.length; i++) {
                                 description += " " + evenementSepare[i];
                             }
-                            if (compteBancaire.debiter(montant)){
+                            if(compteBancaire.payerFacture(numEvenement,montant,description)){
                                 cnx.envoyer(typeEvenement + " " + montant + " " + numEvenement + " OK");
                                 break;
                             }
                             cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Montant invalide)");
 
+
                             //TODO Enregistrer la facture
                         }else {
-
                             CompteBancaire compteACrediter = banque.obtenirCompteBancaire(numEvenement);
                             if (compteACrediter == null){
-                                cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Compte bancaire invalide)");
+                                cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Destinataire invalide)");
                                 break;
                             }
-                            if (compteBancaire.debiter(montant) && compteACrediter.crediter(montant)){
+                            if(compteBancaire.transferer(montant,compteACrediter)){
                                 cnx.envoyer(typeEvenement + " " + montant + " " + numEvenement + " OK");
                                 break;
                             }
-                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Solde invalide)");
+                            cnx.envoyer(typeEvenement + " " + evenement.getArgument() + " NO (Montant invalide)");
                             break;
+
                         }
 
 

@@ -36,7 +36,7 @@ public abstract class CompteBancaire implements Serializable {
     public abstract boolean crediter(double montant);
     public abstract boolean debiter(double montant);
     public abstract boolean payerFacture(String numeroFacture, double montant, String description);
-    public abstract boolean transferer(double montant, String numeroCompteDestinataire);
+    public abstract boolean transferer(double montant, CompteBancaire compteBancaire);
     public abstract PileChainee getHistorique();
     public boolean isTaxeApplicable() {return taxeApplicable;}
 }
