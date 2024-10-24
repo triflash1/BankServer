@@ -1,4 +1,4 @@
-package com.atoudeft.banque;
+package com.atoudeft.banque.operations;
 
 import java.io.Serializable;
 
