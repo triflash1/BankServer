@@ -1,5 +1,9 @@
 package com.atoudeft.banque;
 
+import com.atoudeft.banque.operations.OperationDepot;
+import com.atoudeft.banque.operations.OperationRetrait;
+import com.atoudeft.commun.Piles.PileChainee;
+
 public class CompteEpargne extends CompteBancaire
 {
     private final int LIMITE_COMPTE_AVANT_FRAIS = 1000;
@@ -19,6 +23,7 @@ public class CompteEpargne extends CompteBancaire
     public void ajouterInterets()
     {
         double montantInterets = tauxInteret * this.getSolde();
+        this.historique.ajouter("Interêts ajoutés : " + montantInterets);
         this.setSolde(this.getSolde() + montantInterets);
     }
 
@@ -28,6 +33,7 @@ public class CompteEpargne extends CompteBancaire
         if(this.getSolde() > 0)
         {
             this.setSolde(this.getSolde() + montant);
+            this.historique.ajouter(new OperationRetrait(montant).toString());
             return true;
         }
         return false;
@@ -42,6 +48,7 @@ public class CompteEpargne extends CompteBancaire
             if (taxeApplicable && montant + FRAIS <= this.getSolde())
             {
                 this.setSolde(this.getSolde() - (FRAIS + montant));
+                this.historique.ajouter(new OperationDepot(montant + FRAIS).toString());
                 return true;
             }
             else if(taxeApplicable)
@@ -50,6 +57,7 @@ public class CompteEpargne extends CompteBancaire
             } else //Ici le Solde est plus de LIMITE_COMPTE_AVANT_FRAIS
             {
                 this.setSolde(this.getSolde() - montant);
+                this.historique.ajouter(new OperationDepot(montant).toString());
                 return true;
             }
         }
@@ -66,5 +74,11 @@ public class CompteEpargne extends CompteBancaire
     public boolean transferer(double montant, String numeroCompteDestinataire)
     {
         return false;
+    }
+
+    @Override
+    public PileChainee getHistorique()
+    {
+        return this.historique;
     }
 }

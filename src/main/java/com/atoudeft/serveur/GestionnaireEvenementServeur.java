@@ -126,7 +126,22 @@ public class GestionnaireEvenementServeur implements GestionnaireEvenement {
                     if (cnx.getNumeroCompteClient() == null) {cnx.envoyer("EPARGNE NO (pas Connecté)");}
                     else {cnx.envoyer(banque.ajouterEpargne(cnx.getNumeroCompteClient()));}
                     break;
+                case "HIST":
+                    banque = serveurBanque.getBanque();
 
+                    if (cnx.getNumeroCompteClient() == null) {cnx.envoyer("HIST NO (pas Connecté)");}
+                    else {
+                        CompteClient compteClient = banque.getCompteClient(cnx.getNumeroCompteClient());
+                        List<CompteBancaire> comptes = compteClient.getComptes();
+                        for (int i = 0; i < comptes.size(); i++) {
+                            if (comptes.get(i).getType() == TypeCompte.EPARGNE) {
+                                for(int j = 0; j < comptes.get(i).getHistorique().; j++) {}
+                                comptes.get(i).getHistorique().get(i)
+                                break;
+                            }
+                        }
+                    }
+                    break;
 
 
                 case "SELECT":

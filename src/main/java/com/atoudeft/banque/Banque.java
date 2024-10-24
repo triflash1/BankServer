@@ -166,6 +166,7 @@ public class Banque implements Serializable
         CompteClient compteClient = new CompteClient(numCompteClient,nip);
         String nouveauNumero = genereNouveauNumero();
         CompteCheque compteCheque = new CompteCheque(nouveauNumero,TypeCompte.CHEQUE);
+        //compteCheque.historique.ajouter("Compte épargne créée.");
         compteClient.ajouter(compteCheque);
         this.comptes.add(compteClient);
         return true;
@@ -208,6 +209,7 @@ public class Banque implements Serializable
         String nouveauNumero = genereNouveauNumero();
         CompteEpargne compteEpargne = new CompteEpargne(5, nouveauNumero, TypeCompte.EPARGNE);
         compteClient.ajouter(compteEpargne);
+        //compteEpargne.historique.ajouter("Compte épargne créée.");
         return "EPARGNE OK " + nouveauNumero;
     }
 

@@ -1,5 +1,9 @@
 package com.atoudeft.banque;
 
+import com.atoudeft.banque.operations.OperationDepot;
+import com.atoudeft.banque.operations.OperationRetrait;
+import com.atoudeft.commun.Piles.PileChainee;
+
 public class CompteCheque extends CompteBancaire {
 
     //Pour le moment, il est là parce que il y a une erreur sinon
@@ -16,6 +20,7 @@ public class CompteCheque extends CompteBancaire {
     public boolean crediter(double montant) {
         if (montant > 0) {
             setSolde(this.getSolde() + montant);
+            this.historique.ajouter(new OperationDepot(montant).toString());
             return true;
         }
         return false;
@@ -30,6 +35,7 @@ public class CompteCheque extends CompteBancaire {
     public boolean debiter(double montant) {
         if (montant > 0 && montant <= getSolde()) {
             setSolde(getSolde() - montant);
+            this.historique.ajouter(new OperationRetrait(montant).toString());
             return true;
         }
         return false;
@@ -45,6 +51,12 @@ public class CompteCheque extends CompteBancaire {
     public boolean transferer(double montant, String numeroCompteDestinataire)
     {
         return false;
+    }
+
+    @Override
+    public PileChainee getHistorique()
+    {
+        return this.historique;
     }
 
 
